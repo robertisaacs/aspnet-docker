@@ -1,14 +1,14 @@
 FROM debian:jessie
 
 ENV DNX_VERSION 1.0.0-beta7
-ENV DNX_USER_HOME /opt/dnx
+ENV DNX_USER_HOME /root/.dnx
 
 RUN apt-get -qq update && apt-get -qqy install unzip curl libunwind8 gettext libssl-dev libcurl3-dev zlib1g
 
 RUN curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_USER_HOME=$DNX_USER_HOME DNX_BRANCH=v$DNX_VERSION sh
 RUN bash -c "source $DNX_USER_HOME/dnvm/dnvm.sh \
-	&& dnvm install $DNX_VERSION -a default -r coreclr \
-	&& dnvm alias default | xargs -i ln -s $DNX_USER_HOME/runtimes/{} $DNX_USER_HOME/runtimes/default"
+	&& dnvm install $DNX_VERSION -a x64 -r coreclr \
+	&& dnvm alias x64 | xargs -i ln -s $DNX_USER_HOME/runtimes/{} $DNX_USER_HOME/runtimes/default"
 
 
 # Install libuv for Kestrel from source code (binary is not in wheezy and one in jessie is still too old)
